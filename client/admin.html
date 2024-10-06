@@ -16,10 +16,48 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./style.css">
     </head>
 
     <body onload="getAllUsers()">
-       <button onclick="addPage()">add user</button>
+        <nav class="bg-secondary p-2" >
+            <div class="container">
+            <div class="d-flex justify-content-between align-content-center">
+                <div class="text-danger fs-3">Admin view</div>
+                <div><button onclick="addPage()">add user</button></div>
+            </div>
+            </div>
+           
+        </nav>
+      
+
+
+
+       <div class=" user pt-5">
+        <table  class="bg-white">
+            <thead>
+                <tr class="table-head">
+                    
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Age</th>
+                    <th>View</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    
+                </tr>
+                <tr>
+                
+                </tr>
+            </thead>
+            <tbody id="userTable">
+            </tbody>
+        </table>
+    </div>
         <div id="allUsersContainer"></div>
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

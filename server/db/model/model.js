@@ -53,10 +53,10 @@ let login_schema = new mongoose.Schema({
         type: String,
     },
     phone: {
-        type: Number,
+        type: String,
     },
     age: {
-        type: Number,
+        type : Number,
     },
     userType: {
         type: mongoose.Schema.Types.ObjectId,

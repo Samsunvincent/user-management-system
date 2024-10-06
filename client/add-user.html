@@ -16,34 +16,88 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
-        <div>
+        <!-- <div>
             <form onsubmit="addUser(event)">
-                <!-- Name Field -->
+                Name Field
                 <label for="name">Name:</label><br>
                 <input type="text" id="name" name="name" required><br><br>
                 
-                <!-- Email Field -->
+                Email Field
                 <label for="email">Email:</label><br>
                 <input type="email" id="email" name="email" required><br><br>
                 
-                <!-- Password Field -->
+                Password Field
                 <label for="password">Password:</label><br>
                 <input type="password" id="password" name="password" required><br><br>
                 
-                <!-- User Type Field -->
+                User Type Field
                 <label for="usertype">User Type:</label><br>
                 <select id="usertype" name="usertype" required>
                     <option value="Admin">Admin</option>
                     <option value="Employee">Employee</option>
                 </select><br><br>
                 
-                <!-- Submit Button -->
+                Submit Button
                 <input type="submit" value="Submit">
             </form>
+        </div> -->
+        <div class="main-box">
+            <div class="slider-cont">
+                <div class="">
+                    <div class="">
+                    <h1>The hardest part of starting up is starting out for you.</h1>
+                    <img src=""/>
+                    </div>
+                  </div>
+            </div>
+            
+            
+            <div class="form-cont">
+          
+              
+              
+              <div class="form form-signup">
+                <form onsubmit="addUser(event)">
+                  <lable>FULL NMAE</lable>
+                  <input type="text" placeholder="Your full name" id="name" name="name">
+                  <lable>E-MAIL</lable>
+                  <input type="email" placeholder="Your e-mail"  id="email" name="email" required>
+                  <lable>PASSWORD</lable>
+                  <input type="password" placeholder="Your password" id="password" name="password" required>
+                  <lable>phone no</lable>
+                  <input type="text" placeholder=" phone" id="phone" name="phone">
+                  <lable>Age</lable>
+                  <input type="number" placeholder=" age" id="age" name="age">
+                  <!-- <p class="terms">
+                    <input type="checkbox">
+                    I agree all statments in 
+                    <a href="#" class="lined-link">terms of service</a>
+                  </p> -->
+                  <br>
+                  <label for="usertype" class="text-white">User Type:</label><br>
+                <select id="usertype" name="usertype" class="pt-3" required>
+                    <option  class="option" value="Admin">Admin</option>
+                    <option class="option" value="Employee">Employee</option>
+                </select><br><br>
+                    <div class="">
+                        
+                  <input type="submit"
+                  class="form-btna "
+                    value="Sign Up"/>
+                    </div>
+                  <br><br>
+                  <!-- <a href="#" class="lined-link to-signin-link">I'm already member</a> -->
+                </form>
+              </div>
+            </div>
         </div>
+          
+             
+          
        
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

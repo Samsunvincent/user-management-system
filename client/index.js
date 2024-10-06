@@ -1,5 +1,6 @@
 
 
+
 async function login(event) {
     event.preventDefault()
 
@@ -21,7 +22,7 @@ async function login(event) {
 
 
     try {
-        let response = await fetch('/login', {
+        let response = await fetch('/login',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -90,14 +91,27 @@ async function getAllUsers() {
         let data = parsed_Response.data;
         console.log('data', data);
 
-        let allUsersContainer = document.getElementById('allUsersContainer');
+        let allUsersContainer = document.getElementById('userTable');
 
         let users = '';
 
         for (i = 0; i < data.length; i++) {
             users += `
-            <div onclick = "singleUser('${data[i]._id}')">${data[i].name}</div>
-            <div>${data[i].email}</div>
+           <tr class="hov">
+
+                    <td class="hov">${data[i]._id}</td>
+                    <td class="hov">${data[i].name}</td>
+                    <td class="hov">${data[i].email}</td>
+                    <td class="hov">${data[i].phone}</td>
+                    <td class="hov">${data[i].age}</td>
+
+                    
+
+
+                    <td><button class="custom-btn btn-16" onclick="singleUser('${data[i]._id}')" >view</button></td>
+                    <td><i class="fa fa-pencil-square-o"  onclick="updateClick('${data[i]._id}')" style="font-size:30px" ></i></td>
+                    <td><i class="fa fa-trash" onclick="deleteClick('${data[i]._id}')" style='font-size:30px;color:red'></i></td>
+                </tr>
 
             `
 
@@ -120,6 +134,7 @@ function addPage() {
 
     let token_key = params.get('login');
     console.log("token_key", token_key);
+
     window.location = `add-user.html?login=${token_key}`
 }
 
@@ -139,17 +154,23 @@ async function addUser(event) {
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
     let user_type = document.getElementById('usertype').value;
+    let phone = document.getElementById('phone').value
+    let age = document.getElementById('age').value
 
     let datas = {
         name,
         email,
         password,
-        user_type
+        user_type,
+        phone,
+        age
     };
     console.log('datas', datas);
 
     let strdata = JSON.stringify(datas);
     console.log("strdata", strdata);
+
+
 
 
 
@@ -164,6 +185,14 @@ async function addUser(event) {
             },
             body: strdata
         })
+
+        if(response.status === 200){
+            alert('User added succesfully')
+            window.location = `admin.html?login=${token_key}`
+        }
+        else{
+            alert('Something went wrong')
+        }
 
 
 
@@ -218,8 +247,6 @@ async function singleUserData() {
         let singleUser = `
         <div>${data.name}</div>
         <div>${data.email}</div>
-        <div><button onclick = "updateClick('${data._id}')">update</button></div>
-        <div><button onclick = "deleteClick('${data._id}')">Delete</button></div>
 
       
 
@@ -248,6 +275,7 @@ async function loadData() {
     let name = document.getElementById('name')
    let user_type = document.getElementById('usertype')
     let email = document.getElementById('email');
+    
 
 
     let params = new URLSearchParams(window.location.search);
@@ -345,6 +373,14 @@ async function deleteClick(id){
             }
         });
         console.log("response",response)
+
+        if(response.status === 200){
+            alert('deletion succesfull');
+            window.location = `admin.html?login=${token_key}`
+        }
+        else{
+            alert('deletion failed')
+        }
     } catch (error) {
         console.log('error',error);
     }
