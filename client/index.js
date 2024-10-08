@@ -539,6 +539,4 @@ function signout() {
         console.log("No token key found in URL.");
     }
 }
-function adminProfile(){
-    
-}
+

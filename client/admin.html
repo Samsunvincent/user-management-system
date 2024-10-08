@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="./style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./admin-style.css">
     </head>
 
     <body onload="getAllUsers()">
@@ -31,7 +32,18 @@
 
                 <div>
                     <div>
-                        <i class="fa fa-user-circle-o" style="font-size:24px" onclick="adminProfile()"></i>
+                        <i class="fa fa-user-circle-o" id="openCanvas" style="font-size:24px"></i>
+                       
+
+                        <div id="offCanvas" class="off-canvas">
+                            <div class="off-canvas-content">
+                                <h2>User Details</h2>
+                                <p><strong>Name:</strong> John Doe</p>
+                                <p><strong>Email:</strong> john.doe@example.com</p>
+                                <p><strong>Phone:</strong> +1 234 567 8901</p>
+                                <button id="closeCanvas">Close</button>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -82,5 +94,6 @@
             crossorigin="anonymous"
         ></script>
        <script src="./index.js"></script>
+       <script src="./admin.js"></script>
     </body>
 </html>
