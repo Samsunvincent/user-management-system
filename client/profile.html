@@ -16,23 +16,18 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="profile.css">
     </head>
 
-    <body onload="singleProfile()">
-        <nav>
-            <div class="d-flex justify-content-between">
-                <div>
-                    <p>Employee view</p>
-                </div>
-                <div>
-                    <button onclick="Profile()">profile</button>
-                </div>
-                <div><button onclick="signout()">signOut</button></div>
-            </div>
-        </nav>
-        <div id="profileContainer">
-
-        </div>
+    <body onload="profileView()">
+        <div class="profile-display-container">
+            <h2>User Profile</h2>
+            <div id="profileContainer"></div>
+        
+           
+        
+            <button onclick="window.history.back()" class="back-btn">Go Back</button>
+          </div>
       
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -45,6 +40,6 @@
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"
         ></script>
-        <script src="./index.js"></script>
+        <script src="index.js"></script>
     </body>
 </html>

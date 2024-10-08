@@ -368,7 +368,7 @@ input[type="email"],
 input[type="password"],
 input[type="number"] {
   color: #fff;
-  width: 100%;
+  /* width: 100%; */
   border: none;
   font-size: 16px;
   font-weight: 200;

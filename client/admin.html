@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
 
     <body onload="getAllUsers()">
@@ -27,6 +28,15 @@
             <div class="d-flex justify-content-between align-content-center">
                 <div class="text-danger fs-3">Admin view</div>
                 <div><button onclick="addPage()">add user</button></div>
+
+                <div>
+                    <div>
+                        <i class="fa fa-user-circle-o" style="font-size:24px" onclick="adminProfile()"></i>
+
+                    </div>
+                </div>
+        <!-- <div><button onclick="signout()">signOut</button></div> -->
+
             </div>
             </div>
            
@@ -59,6 +69,7 @@
         </table>
     </div>
         <div id="allUsersContainer"></div>
+
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
