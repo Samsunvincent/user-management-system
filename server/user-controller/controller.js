@@ -1,9 +1,13 @@
 let login = require('../db/model/model');
 const userType = require('../db/model/user-type');
+const { fileDelete } = require('../util/delete-file');
 const { success_function, error_function } = require('../util/response-handler')
 const bcrypt = require('bcrypt')
 const sendemail = require('../util/send-email').sendEmail
 const resetPassword = require('../user-controller/email-templates/set-password').resetPassword
+const fileupload = require('../util/file-upload').fileUpload
+const path = require('path'); 
+
 
 
 
@@ -30,6 +34,15 @@ exports.signin  = async function(req,res){
         body.user_type = id
         console.log('body.userType',body.user_type)
 
+        let image = body.image;
+
+        if (image) {
+            let img_path = await fileupload(image, "user");
+            console.log("img_path", img_path);
+            body.image = img_path
+        }
+
+
         function generateRandomPassword(length) {
             let charset =
               "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
@@ -46,9 +59,9 @@ exports.signin  = async function(req,res){
           var randomPassword = generateRandomPassword(12);
           console.log(randomPassword);
 
-        let content = await resetPassword(name,emails,randomPassword)
+        // let content = await resetPassword(name,emails,randomPassword)
 
-        await sendemail(emails,"update password",content)
+        // await sendemail(emails,"update password",content)
 
 
   
@@ -64,7 +77,8 @@ exports.signin  = async function(req,res){
             password : password,
             phone : req.body.phone,
             age : req.body.age,
-            userType : req.body.user_type
+            userType : req.body.user_type,
+            image : req.body.image
 
           }
         
@@ -179,8 +193,25 @@ exports.updateUser = async function(req,res){
     let id = req.params.id;
     console.log('id form put',id);
 
-    let updatedData = await login.updateOne({_id : id}, {$set : body}).populate('userType')
+    let splittedImg;
+    
+    if(body.image){
+        let image_path = await login.findOne({_id:id})
+        console.log('image_path',image_path)
 
+         splittedImg = image_path.image.split('/')[2] // Extract the file name
+         console.log("image_path.image",image_path.image);
+
+       let  img_path = await fileupload(body.image, "user");
+        console.log("img_path", img_path);
+         body.image = img_path;
+    }
+
+    let updatedData = await login.updateOne({_id : id}, {$set : body}).populate('userType')
+    if(body.image){
+        const imagePath = path.join('./uploads','user',splittedImg);
+        fileDelete(imagePath);
+    }
 
     let response = success_function({
         success : true,

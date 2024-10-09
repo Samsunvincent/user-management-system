@@ -1,8 +1,8 @@
-document.getElementById('openCanvas').addEventListener('click', function() {
-    document.getElementById('offCanvas').classList.add('active');
-});
-
-document.getElementById('closeCanvas').addEventListener('click', function() {
-    document.getElementById('offCanvas').classList.remove('active');
-});
-
+function toggleOffCanvas() {
+    const offCanvas = document.getElementById('offCanvas');
+    const overlay = document.getElementById('overlay');
+    
+    offCanvas.classList.toggle('active');
+    overlay.classList.toggle('active');
+  }
+  

@@ -22,7 +22,7 @@ async function login(event) {
 
 
     try {
-        let response = await fetch('/login',{
+        let response = await fetch('/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -156,49 +156,82 @@ async function addUser(event) {
     let user_type = document.getElementById('usertype').value;
     let phone = document.getElementById('phone').value
     let age = document.getElementById('age').value
+    let image = document.getElementById('image')
 
+    const file = image.files[0]
     let datas = {
         name,
         email,
-       
+        image: "",
         user_type,
         phone,
         age
     };
     console.log('datas', datas);
+    if (file) {
+        const reader = new FileReader();
 
-    let strdata = JSON.stringify(datas);
-    console.log("strdata", strdata);
+        reader.onload = async function (e) {
+            const dataUrl = e.target.result; // The result will be a Data URL
+            datas.image = dataUrl; // Assign the Data URL to the image property in the datas object
+
+            // let strdata = JSON.stringify(datas);
+            // console.log("strdata", strdata);
 
 
+            try {
+                let response = await fetch(`/signin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(datas)
+                });
+                console.log("response from add", response);
 
+                let parsed_Response = await response.text();
+                console.log("parsed_response", parsed_Response);
 
-
-
-
-    try {
-        let response = await fetch(`/signin`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: strdata
-        })
-
-        if(response.status === 200){
-            alert('User added succesfully')
-            window.location = `admin.html?login=${token_key}`
+                if (response.status === 200) {
+                    alert('User added successfully');
+                    window.location = `admin.html?login=${token_key}`
+                }
+                else {
+                    alert("something went wrong")
+                }
+            } catch (error) {
+                console.log("error", error);
+            }
         }
-        else{
-            alert('Something went wrong')
+        reader.readAsDataURL(file);
+    } else {
+        try {
+            let response = await fetch(`/signin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(datas)
+
+            });
+            console.log("response from add", response);
+
+            let parsed_Response = await response.text();
+            console.log("parsed_Response", parsed_Response);
+
+            if (response.status === 200) {
+                alert("user added succefully");
+
+            } else {
+                alert("something went wrong");
+            }
+        } catch (error) {
+            console.log("error", error);
         }
-
-
-
-    } catch (error) {
-        console.log("error", error);
     }
+
 }
 
 
@@ -245,6 +278,8 @@ async function singleUserData() {
         let singleUserContainer = document.getElementById('singleUserContainer');
 
         let singleUser = `
+        <div><img src = "${data.image}"></div>
+
         <div>Name: ${data.name}</div>
         <div>Email: ${data.email}</div>
         <div>Age: ${data.age}</div>
@@ -278,11 +313,11 @@ function updateClick(id) {
 
 async function loadData() {
     let name = document.getElementById('name')
-   let user_type = document.getElementById('usertype')
+    let user_type = document.getElementById('usertype')
     let email = document.getElementById('email');
     let phone = document.getElementById('phone')
     let age = document.getElementById('age')
-    
+
 
 
     let params = new URLSearchParams(window.location.search);
@@ -319,7 +354,7 @@ async function loadData() {
 
 
     } catch (error) {
-        console.log("error",error)
+        console.log("error", error)
     }
 
 
@@ -327,26 +362,25 @@ async function loadData() {
 
 }
 
-async function updateData(event){
-    event.preventDefault()
+async function updateData(event) {
+    event.preventDefault();
     let params = new URLSearchParams(window.location.search);
-    console.log("params",params);
-
 
     let id = params.get('id');
-    console.log("id form updatdata",id);
     let token_key = params.get('login');
-    console.log("token_key",token_key)
-
     let token = localStorage.getItem(token_key);
-    console.log("token",token);
 
     let name = document.getElementById('name').value;
-    let user_type = document.getElementById('usertype').value
-    let email = document.getElementById('email').value
-    let phone = document.getElementById('phone').value
-    let age = document.getElementById('age').value
+    let imageInput = document.getElementById('image'); // Updated from image to imageInput
+    let user_type = document.getElementById('usertype').value;
+    let email = document.getElementById('email').value;
+    let phone = document.getElementById('phone').value;
+    let age = document.getElementById('age').value;
 
+    const file = imageInput.files[0]; // Get the file object if available
+    console.log("file",file);
+
+    // Create the initial data object without the image field
     let data = {
         name,
         user_type,
@@ -354,63 +388,86 @@ async function updateData(event){
         phone,
         age
     };
-    console.log("dataa",data);
 
-    let strdata = JSON.stringify(data);
-    console.log("strdata",strdata)
+    console.log("Initial data", data);
 
+    // Function to handle sending the data to the server
+    const sendData = async (imageDataUrl = null) => {
+        if (imageDataUrl) {
+            data.image = imageDataUrl; // Only add image if one is provided
+        }
 
-    try {
-        let response = await fetch(`/user/${id}`,{
-            method : 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body : strdata
-        });
+        let strdata = JSON.stringify(data);
+        console.log("strdata", strdata);
 
-        console.log("response",response);
-    } catch (error) {
-        console.log("error",error);
+        try {
+            let response = await fetch(`/user/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: strdata
+            });
+
+            console.log("response", response);
+            // Optionally, redirect the user after successful update
+            // window.location = `admin.html`
+        } catch (error) {
+            console.log("error", error);
+        }
+    };
+
+    // If there's an image file, convert it to a base64 string
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const dataUrl = e.target.result; // This is the base64 image data
+            sendData(dataUrl); // Send the data with the image
+        };
+        reader.readAsDataURL(file); // Read the image file as a data URL
+    } else {
+        sendData(); // No image, just send the other data without modifying the image
     }
 }
 
-async function deleteClick(id){
-   
-    console.log("id",id)
+
+
+async function deleteClick(id) {
+
+    console.log("id", id)
     let params = new URLSearchParams(window.location.search);
-    console.log("params",params)
+    console.log("params", params)
 
     let token_key = params.get('login');
-    console.log("tokenkey",token_key)
+    console.log("tokenkey", token_key)
 
     let token = localStorage.getItem(token_key);
-    console.log("token",token)
+    console.log("token", token)
 
     try {
-        let response = await fetch(`/user/${id}`,{
-            method : 'DELETE',
-            headers : { 
+        let response = await fetch(`/user/${id}`, {
+            method: 'DELETE',
+            headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        console.log("response",response)
+        console.log("response", response)
 
-        if(response.status === 200){
+        if (response.status === 200) {
             alert('deletion succesfull');
             window.location = `admin.html?login=${token_key}`
         }
-        else{
+        else {
             alert('deletion failed')
         }
     } catch (error) {
-        console.log('error',error);
+        console.log('error', error);
     }
 }
 
 
-async function singleProfile(){
+async function singleProfile() {
     let params = new URLSearchParams(window.location.search);
     console.log("params", params);
 
@@ -453,35 +510,35 @@ async function singleProfile(){
 
         profileContainer.innerHTML = viewContainer
     }
-    catch(error){
-        console.log("error",error);
+    catch (error) {
+        console.log("error", error);
     }
 }
 
-function Profile(){
+function Profile() {
 
     let params = new URLSearchParams(window.location.search);
 
     let token_key = params.get('login');
     let id = params.get('id');
-    console.log("id",id)
+    console.log("id", id)
 
-     window.location = `profile.html?login=${token_key}&id=${id}`;
+    window.location = `profile.html?login=${token_key}&id=${id}`;
 
 
 }
-async function profileView(){
+async function profileView() {
     let profileContainer = document.getElementById('profileContainer')
 
     let params = new URLSearchParams(window.location.search);
     console.log("params", params);
-    
+
     let id = params.get('id');
     console.log("id", id)
-    
+
     let token_key = params.get('login');
     console.log("token_key", token_key);
-    
+
 
     let token = localStorage.getItem(token_key)
     console.log("token", token);
@@ -502,7 +559,7 @@ async function profileView(){
         console.log("data", data);
 
 
-       let profile = `
+        let profile = `
         <div>
              <div class="profile-details ">
               <div id="name"><strong>Name:</strong> ${data.name}</div>
@@ -512,11 +569,11 @@ async function profileView(){
             </div> 
         </div>
        `
-       profileContainer.innerHTML = profile
-}
-catch(error){
-    console.log('error',error);
-}
+        profileContainer.innerHTML = profile
+    }
+    catch (error) {
+        console.log('error', error);
+    }
 }
 
 function signout() {
@@ -524,24 +581,26 @@ function signout() {
 
     // Get the URL parameters
     let params = new URLSearchParams(window.location.search);
-    
+
     // Retrieve the token key from the 'login' query parameter
     let token_key = params.get('login');
-    
-    
+
+
     // Check if the token key exists
     if (token_key) {
         console.log("Token Key:", token_key);
-        
+
         // Remove the item from localStorage
         localStorage.removeItem(token_key);
         console.log("Token Key removed:", token_key);
         console.log("Local Storage keys:", Object.keys(localStorage));
 
+        window.location = `index.html`
+
 
         // Optional: Redirect to index.html after successful signout
         // window.location = 'index.html';
-        
+
     } else {
         console.log("No token key found in URL.");
     }

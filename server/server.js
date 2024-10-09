@@ -8,7 +8,7 @@ mongoConnect();
 const router = require('./Router/router')
 const authRouter = require('../server/Router/auth-Router')
 
-app.use(express.json());
+app.use(express.json({limit : "500mb"}));
 app.use(express.urlencoded({extended : true}));
 app.use(express.static('../client'));
 app.use(router)

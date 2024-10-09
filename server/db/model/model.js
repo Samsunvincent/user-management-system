@@ -61,6 +61,9 @@ let login_schema = new mongoose.Schema({
     userType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user_Type'  // Correctly references the 'user_Type' model
+    },
+    image : {
+        type : String
     }
 });
 
