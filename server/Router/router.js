@@ -10,12 +10,12 @@ function setAccessControl(access_types){
         accessControl(access_types,req,res,next)
     }
 }
-router.post('/signin',controller.signin)
+router.post('/signin',setAccessControl('1'),controller.signin)
 router.get(`/getAllData`,setAccessControl("1"),controller.getAllData)
 router.get(`/user/:id`,setAccessControl('*'),controller.getsingle)
-router.put('/user/:id',setAccessControl('1'),controller.update)
+router.put('/user/:id',setAccessControl('*'),controller.updateUser)
 router.delete('/user/:id',setAccessControl('1'),controller.deleteUser);
-router.put('/passwordreset',setAccessControl('1,2'),controller.resetPassword)
+router.put('/passwordreset/:id',setAccessControl('1,2'),controller.resetPassword)
 
 
 module.exports = router

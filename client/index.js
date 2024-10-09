@@ -330,11 +330,16 @@ async function loadData() {
 async function updateData(event){
     event.preventDefault()
     let params = new URLSearchParams(window.location.search);
+    console.log("params",params);
+
 
     let id = params.get('id');
+    console.log("id form updatdata",id);
     let token_key = params.get('login');
+    console.log("token_key",token_key)
 
     let token = localStorage.getItem(token_key);
+    console.log("token",token);
 
     let name = document.getElementById('name').value;
     let user_type = document.getElementById('usertype').value
@@ -345,7 +350,9 @@ async function updateData(event){
     let data = {
         name,
         user_type,
-        email,phone,age
+        email,
+        phone,
+        age
     };
     console.log("dataa",data);
 

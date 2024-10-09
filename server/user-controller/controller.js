@@ -170,91 +170,91 @@ exports.getsingle = async function (req,res){
 }
 
 
-// exports.updateUser = async function(req,res){
-//    try {
-//     let body = req.body;
-//     console.log("body",body);
+exports.updateUser = async function(req,res){
+   try {
+    let body = req.body;
+    console.log("body",body);
 
 
-//     let id = req.params.id;
-//     console.log('id form put',id);
+    let id = req.params.id;
+    console.log('id form put',id);
 
-//     let updatedData = await login.updateOne({_id : id}, {$set : body}).populate('userType')
+    let updatedData = await login.updateOne({_id : id}, {$set : body}).populate('userType')
 
-
-//     let response = success_function({
-//         success : true,
-//         statusCode : 200,
-//         message : "updation successfull",
-//         data : updatedData
-//     })
-//     res.status(response.statusCode).send(response);
-//     return;
-//    } catch (error) {
-//     console.log("error while updating",error);
-
-//     let response = error_function({
-//         success : false,
-//         statusCode : 400,
-//         message : "updation failed",
-
-//     });
-//     res.status(response.statusCode).send(response);
-//     return;
-    
-//    }
-
-// }
-
-exports.update = async function (req,res){
-    
-    try {
-        let body = req.body;
-        console.log("body",body);
-
-
-
-        let data= {
-            name : body.name,
-            email : body.email,
-            phoneno : body.phoneno,
-            password : body.password,
-            usertype : body.user_type
-        }
-
-        
-    updateId = req.params.id 
-    console.log("updateId",updateId);
-
-    let update_employee = await login.updateOne({_id : updateId},data);
-    console.log("updateemployee",update_employee);
 
     let response = success_function({
-        success: true,
-        statusCode:200,
-        data:update_employee,
-        message: "successfully Updated..",
-        
+        success : true,
+        statusCode : 200,
+        message : "updation successfull",
+        data : updatedData
     })
-    res.status(response.statusCode).send(response)
+    res.status(response.statusCode).send(response);
     return;
+   } catch (error) {
+    console.log("error while updating",error);
+
+    let response = error_function({
+        success : false,
+        statusCode : 400,
+        message : "updation failed",
+
+    });
+    res.status(response.statusCode).send(response);
+    return;
+    
+   }
+
+}
+
+// exports.update = async function (req,res){
+    
+//     try {
+//         let body = req.body;
+//         console.log("body",body);
+
+
+
+//         let data= {
+//             name : body.name,
+//             email : body.email,
+//             phoneno : body.phoneno,
+//             password : body.password,
+//             usertype : body.user_type
+//         }
+
+        
+//     updateId = req.params.id 
+//     console.log("updateId",updateId);
+
+//     let update_employee = await login.updateOne({_id : updateId},data);
+//     console.log("updateemployee",update_employee);
+
+//     let response = success_function({
+//         success: true,
+//         statusCode:200,
+//         data:update_employee,
+//         message: "successfully Updated..",
+        
+//     })
+//     res.status(response.statusCode).send(response)
+//     return;
 
     
 
-    } catch (error) {
+//     } catch (error) {
 
-    console.log("error : ", error);
-    let response = error_function({
-        success: false,
-        statusCode: 400,
-        message: "error"
-    })
-    res.status(response.statusCode).send(response)
-    return;
-}
+//     console.log("error : ", error);
+//     let response = error_function({
+//         success: false,
+//         statusCode: 400,
+//         message: "error"
+//     })
+//     res.status(response.statusCode).send(response)
+//     return;
+// }
 
 
-}
+// }
 
 
 exports.deleteUser = async function(req,res){
@@ -293,13 +293,15 @@ exports.resetPassword = async function(req,res){
 
 
 try {
-    let _id = req.params
+    let _id = req.params.id
 
     let email = req.body.email;
     console.log("email",email);
 
     let user = await login.findOne({_id});
     console.log("user",user);
+
+
 
     let passwordMatch =  bcrypt.compareSync(req.body.password,user.password);
     console.log("password",passwordMatch)
