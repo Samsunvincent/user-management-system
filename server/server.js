@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended : true}));
 app.use(express.static('../client'));
 app.use(router)
 app.use(authRouter)
+app.use('/uploads',express.static('./uploads'))
 
 
 

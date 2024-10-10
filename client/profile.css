@@ -40,4 +40,6 @@
   .back-btn:hover {
     background-color: #218838;
   }
-  
+  .reset{
+    display: none;
+  }

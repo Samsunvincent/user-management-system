@@ -35,6 +35,7 @@ exports.signin  = async function(req,res){
         console.log('body.userType',body.user_type)
 
         let image = body.image;
+        console.log("image nnnnn",image);
 
         if (image) {
             let img_path = await fileupload(image, "user");
@@ -57,7 +58,7 @@ exports.signin  = async function(req,res){
           }
   
           var randomPassword = generateRandomPassword(12);
-          console.log(randomPassword);
+          console.log('randomPassword',randomPassword);
 
         // let content = await resetPassword(name,emails,randomPassword)
 

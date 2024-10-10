@@ -278,8 +278,8 @@ async function singleUserData() {
         let singleUserContainer = document.getElementById('singleUserContainer');
 
         let singleUser = `
-        <div><img src = "${data.image}"></div>
-
+        
+        <div><img src="${data.image}"></div>
         <div>Name: ${data.name}</div>
         <div>Email: ${data.email}</div>
         <div>Age: ${data.age}</div>
@@ -499,6 +499,7 @@ async function singleProfile() {
         let profileContainer = document.getElementById('profileContainer');
 
         let viewContainer = `
+        <div><img src="${data.image}"></div>
         <div>${data.name}</div>
         <div>${data.email}</div>
         <div>${data.phone}</div>
@@ -561,11 +562,14 @@ async function profileView() {
 
         let profile = `
         <div>
-             <div class="profile-details ">
+             <div class="profile text-center"><img src = "${data.image}" class ="rounded-circle"></div>
               <div id="name"><strong>Name:</strong> ${data.name}</div>
               <p><strong>Email:</strong>${data.email}</p>
               <p><strong>Age:</strong>${data.age}</p>
               <p><strong>Phone Number:</strong>${data.phone}</p>
+              <div><button onclick="resetpassword('${data._id}')">reset password</button></div>
+              <div class = "reset">wsdxc</div>
+              <div><button>update</button></div>
             </div> 
         </div>
        `
@@ -604,5 +608,38 @@ function signout() {
     } else {
         console.log("No token key found in URL.");
     }
+}
+
+async function resetpassword(id){
+    console.log("id",id);
+
+    let params = new URLSearchParams(window.location.search);
+
+    let reset = document.getElementsByClassName("reset")
+    reset.style.display = "block";
+
+    let token_key = params.get('login');
+
+    let token = localStorage.getItem(token_key);
+    console.log("token",token);
+
+
+
+    
+    try {
+
+        let response = await fetch(`/passwordreset/${id}`,{
+            method : 'PUT',
+            headers : { 
+                'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${token}`
+            },
+            
+        })
+    } catch (error) {
+        
+    }
+
+
 }
 
