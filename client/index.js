@@ -52,7 +52,7 @@ async function login(event) {
 
 
         if (user_type === "Admin") {
-            window.location = `admin.html?login=${token_key}`,
+            window.location = `admin.html?login=${token_key}&id=${id}`,
                 alert("admin logging succesfull")
         }
         else if (user_type === "Employee") {
@@ -378,7 +378,7 @@ async function updateData(event) {
     let age = document.getElementById('age').value;
 
     const file = imageInput.files[0]; // Get the file object if available
-    console.log("file",file);
+    console.log("file", file);
 
     // Create the initial data object without the image field
     let data = {
@@ -531,6 +531,9 @@ function Profile() {
 async function profileView() {
     let profileContainer = document.getElementById('profileContainer')
 
+   
+
+
     let params = new URLSearchParams(window.location.search);
     console.log("params", params);
 
@@ -567,9 +570,7 @@ async function profileView() {
               <p><strong>Email:</strong>${data.email}</p>
               <p><strong>Age:</strong>${data.age}</p>
               <p><strong>Phone Number:</strong>${data.phone}</p>
-              <div><button onclick="resetpassword('${data._id}')">reset password</button></div>
-              <div class = "reset">wsdxc</div>
-              <div><button>update</button></div>
+            <div><button>update</button></div>
             </div> 
         </div>
        `
@@ -610,36 +611,110 @@ function signout() {
     }
 }
 
-async function resetpassword(id){
-    console.log("id",id);
+async function resetpassword(event){
+    event.preventDefault()
+
+    let password = document.getElementById('current_password').value;
+
+    let newpassword = document.getElementById('newpassword').value;
 
     let params = new URLSearchParams(window.location.search);
+    console.log("params",params);
 
-    let reset = document.getElementsByClassName("reset")
-    reset.style.display = "block";
+    let id = params.get('id');
+    console.log("id",id);
 
     let token_key = params.get('login');
+    console.log("token_key",token_key);
 
     let token = localStorage.getItem(token_key);
     console.log("token",token);
-
-
-
     
-    try {
 
+    let data = {
+        password,
+        newpassword
+    }
+    console.log("data",data);
+
+    let strdata = JSON.stringify(data);
+    console.log("strdata",strdata);
+
+    try {
         let response = await fetch(`/passwordreset/${id}`,{
             method : 'PUT',
-            headers : { 
+            headers :{
                 'Content-Type' : 'application/json',
                 'Authorization' : `Bearer ${token}`
             },
-            
-        })
+            body : strdata
+        });
+        console.log("response",response);
+
+        if(response.status === 200){
+            alert('password reset success');
+            window.location = `index.html`
+        }
     } catch (error) {
+        console.log("error",error);
+    }
+
+    
+}
+
+    async function adminscale(event){
+        event.preventDefault()
+        console.log("reached",)
         
+        let params = new URLSearchParams(window.location.search);
+
+        let id = params.get('id');
+        console.log("id",id)
+
+        let token_key = params.get('login');
+        console.log("token_key",token_key)
+
+        let token = localStorage.getItem(token_key);
+
+        try {
+            let response = await fetch(`/user/${id}`,{
+                method : 'GET',
+                headers : {
+                    'Authorization' : `Bearer ${token}`
+                }
+            });
+            console.log("response profile",response);
+
+            let parsed_Response = await response.json();
+            console.log("parsed_response",parsed_Response);
+
+            let data = parsed_Response.data;
+            console.log("data",data);
+
+            let admin_data = document.getElementById('admin_data');
+
+            let adminprofiledata = `
+                <div class="text-center">
+                    <div><img src = "${data.image}" class= "rounded-circle"></div>
+                    <div><strong>Name</strong> : ${data.name}</div>
+                    <div><strong>Name</strong> : ${data.email}</div>
+                    <div><strong>Name</strong> : ${data.phone}</div>
+                    <div><strong>Name</strong> : ${data.age}</div>
+
+
+
+                    
+                </div>
+            `
+
+            admin_data.innerHTML = adminprofiledata
+
+        } catch (error) {
+            console.log("error response",error)
+        }
+
+
     }
 
 
-}
 

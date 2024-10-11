@@ -43,3 +43,26 @@
   .reset{
     display: none;
   }
+  .current_password{
+    padding: 0px 0px 0px 30px ;
+  }
+  .newpassword{
+    padding: 0px 0px 0px 50px ;
+  }
+  .offcanvas{
+    min-width: 35%;
+  }
+  .newpassword_type
+  {
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-bottom: 1px solid black;
+    border-radius: 16px;
+    text-align: center;
+
+  }
+  form{
+    border: 5px double black;
+    padding: 10px;
+    border-radius: 10px;
+
+  }
