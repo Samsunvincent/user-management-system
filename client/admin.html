@@ -23,17 +23,21 @@
         <link rel="stylesheet" href="./admin-style.css">
     </head>
 
-    <body onload="getAllUsers(); adminscale(event)">
+    <body onload="getAllUsers(); adminscale(event)" class="background-color">
 
-        <nav class="" >
+        <nav class="p-5 bg-dark" >
             <div class="container">
-            <div class="d-flex justify-content-between align-content-center">
+            <div class="d-flex justify-content-between align-items-center">
                 <div class="text-danger fs-3">Admin view</div>
-                <div><button onclick="addPage()">add user</button></div>
+
+
+               <div class="d-flex align-items-center gap-5 border-style-none">
+                <div><a href="./index.html">Home</a></div>
+                <div><button onclick="addPage()" class="adduser text-light">Add User</button></div>
 
                 <div>
                     <header>
-                        <div class="user-icon" onclick="toggleOffCanvas()" onload=>👤</div>
+                        <div class="user-icon text-light"  onclick="toggleOffCanvas()" onload=><img src="https://img.icons8.com/?size=100&id=492ILERveW8G&format=png&color=000000" style="width: 30px;"></div>
                       </header>
                     
                       <div class="off-canvas" id="offCanvas" >
@@ -51,7 +55,8 @@
                       <div class="overlay" id="overlay"></div>
                     
                 </div>
-        <div><button onclick="signout()">signOut</button></div>
+        <div><button onclick="signout()" class="adduser text-light">SignOut</button></div>
+               </div>
 
             </div>
             </div>

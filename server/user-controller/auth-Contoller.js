@@ -20,6 +20,10 @@ exports.login = async function(req,res){
         let password_match = bcrypt.compareSync(password , db_password);
         console.log('password_match',password_match)
 
+        check_user.isFirstLogin = false;  // Update first login flag
+
+        await check_user.save();
+
         if(password_match){
             let token = jwt.sign({user_id : check_user._id}, process.env.PRIVATE_KEY,{expiresIn : "10d"});
             console.log("token : ",token);
@@ -29,7 +33,8 @@ exports.login = async function(req,res){
             let response_data ={
                 id : check_user._id,
                 user_type :  check_user.userType.user_type,
-                token : token
+                token : token,
+                isFirstLogin : check_user.isFirstLogin
             }
             console.log("response_data",response_data);
             

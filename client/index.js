@@ -50,6 +50,14 @@ async function login(event) {
 
         localStorage.setItem(token_key, token);
 
+        let isFirstLogin = token_data.isFirstLogin;
+        console.log("isFirst",isFirstLogin);
+
+        if(isFirstLogin === true){
+            window.location = `resetpassword.html?${id}&login=${token_key}`
+        }
+        
+
 
         if (user_type === "Admin") {
             window.location = `admin.html?login=${token_key}&id=${id}`,
@@ -108,7 +116,7 @@ async function getAllUsers() {
                     
 
 
-                    <td><button class="custom-btn btn-16" onclick="singleUser('${data[i]._id}')" >view</button></td>
+                    <td><span class="custom-btn btn-16" onclick="singleUser('${data[i]._id}')" ><i class="fa fa-eye" style="font-size:24px"></i></span></td>
                     <td><i class="fa fa-pencil-square-o"  onclick="updateClick('${data[i]._id}')" style="font-size:30px" ></i></td>
                     <td><i class="fa fa-trash" onclick="deleteClick('${data[i]._id}')" style='font-size:30px;color:red'></i></td>
                 </tr>
@@ -496,20 +504,26 @@ async function singleProfile() {
         let data = parsed_Response.data
         console.log("data", data);
 
-        let profileContainer = document.getElementById('profileContainer');
+        let welcomecontainer = document.getElementById('welcome-container');
 
         let viewContainer = `
-        <div><img src="${data.image}"></div>
-        <div>${data.name}</div>
-        <div>${data.email}</div>
-        <div>${data.phone}</div>
-        <div>${data.age}</div>
+        
+ 
+            <div class="text-white container pt-5">
+                <span class="fs-1">WELCOME</span><span class="px-3 fs-1">${data.name}</span>
+                <div class="pt-5 fs-4 ">
+                    We are thrilled to have you as part of our growing family! At ABC, we believe that our success stems from the collective contributions of each and every one of you. Your skills, passion, and dedication are key to driving us forward.
+                    We are committed to fostering an environment where you can thrive, learn, and grow both personally and professionally. Here, we value collaboration, innovation, and a shared vision for excellence.                
+                </div>
+            </div>
+      
+ 
+      
 
-        <div><button onclick = "updateClick('${data._id}')">update</button></div>
 
         `
 
-        profileContainer.innerHTML = viewContainer
+        welcomecontainer.innerHTML = viewContainer
     }
     catch (error) {
         console.log("error", error);
@@ -531,7 +545,7 @@ function Profile() {
 async function profileView() {
     let profileContainer = document.getElementById('profileContainer')
 
-   
+
 
 
     let params = new URLSearchParams(window.location.search);
@@ -570,7 +584,8 @@ async function profileView() {
               <p><strong>Email:</strong>${data.email}</p>
               <p><strong>Age:</strong>${data.age}</p>
               <p><strong>Phone Number:</strong>${data.phone}</p>
-            <div><button>update</button></div>
+        <div><button onclick = "updateClick('${data._id}')">update</button></div>
+            
             </div> 
         </div>
        `
@@ -611,7 +626,7 @@ function signout() {
     }
 }
 
-async function resetpassword(event){
+async function resetpassword(event) {
     event.preventDefault()
 
     let password = document.getElementById('current_password').value;
@@ -619,81 +634,81 @@ async function resetpassword(event){
     let newpassword = document.getElementById('newpassword').value;
 
     let params = new URLSearchParams(window.location.search);
-    console.log("params",params);
+    console.log("params", params);
 
     let id = params.get('id');
-    console.log("id",id);
+    console.log("id", id);
 
     let token_key = params.get('login');
-    console.log("token_key",token_key);
+    console.log("token_key", token_key);
 
     let token = localStorage.getItem(token_key);
-    console.log("token",token);
-    
+    console.log("token", token);
+
 
     let data = {
         password,
         newpassword
     }
-    console.log("data",data);
+    console.log("data", data);
 
     let strdata = JSON.stringify(data);
-    console.log("strdata",strdata);
+    console.log("strdata", strdata);
 
     try {
-        let response = await fetch(`/passwordreset/${id}`,{
-            method : 'PUT',
-            headers :{
-                'Content-Type' : 'application/json',
-                'Authorization' : `Bearer ${token}`
+        let response = await fetch(`/passwordreset/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body : strdata
+            body: strdata
         });
-        console.log("response",response);
+        console.log("response", response);
 
-        if(response.status === 200){
+        if (response.status === 200) {
             alert('password reset success');
             window.location = `index.html`
         }
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
     }
 
-    
+
 }
 
-    async function adminscale(event){
-        event.preventDefault()
-        console.log("reached",)
-        
-        let params = new URLSearchParams(window.location.search);
+async function adminscale(event) {
+    event.preventDefault()
+    console.log("reached",)
 
-        let id = params.get('id');
-        console.log("id",id)
+    let params = new URLSearchParams(window.location.search);
 
-        let token_key = params.get('login');
-        console.log("token_key",token_key)
+    let id = params.get('id');
+    console.log("id", id)
 
-        let token = localStorage.getItem(token_key);
+    let token_key = params.get('login');
+    console.log("token_key", token_key)
 
-        try {
-            let response = await fetch(`/user/${id}`,{
-                method : 'GET',
-                headers : {
-                    'Authorization' : `Bearer ${token}`
-                }
-            });
-            console.log("response profile",response);
+    let token = localStorage.getItem(token_key);
 
-            let parsed_Response = await response.json();
-            console.log("parsed_response",parsed_Response);
+    try {
+        let response = await fetch(`/user/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        console.log("response profile", response);
 
-            let data = parsed_Response.data;
-            console.log("data",data);
+        let parsed_Response = await response.json();
+        console.log("parsed_response", parsed_Response);
 
-            let admin_data = document.getElementById('admin_data');
+        let data = parsed_Response.data;
+        console.log("data", data);
 
-            let adminprofiledata = `
+        let admin_data = document.getElementById('admin_data');
+
+        let adminprofiledata = `
                 <div class="text-center">
                     <div><img src = "${data.image}" class= "rounded-circle"></div>
                     <div><strong>Name</strong> : ${data.name}</div>
@@ -707,14 +722,14 @@ async function resetpassword(event){
                 </div>
             `
 
-            admin_data.innerHTML = adminprofiledata
+        admin_data.innerHTML = adminprofiledata
 
-        } catch (error) {
-            console.log("error response",error)
-        }
-
-
+    } catch (error) {
+        console.log("error response", error)
     }
+
+
+}
 
 
 

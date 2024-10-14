@@ -352,6 +352,8 @@ try {
         body.password = hashed_Password;
         console.log("body.password",body.password);
 
+        
+
         let updatePassword = await login.updateOne({_id},{$set:{password : body.password}});
         console.log("updatedpassword",updatePassword);
 

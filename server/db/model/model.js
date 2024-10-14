@@ -64,6 +64,9 @@ let login_schema = new mongoose.Schema({
     },
     image : {
         type : String
+    },
+    isFirstLogin: { 
+        type: Boolean, default: true 
     }
 });
 
