@@ -7,6 +7,9 @@ const sendemail = require('../util/send-email').sendEmail
 const resetPassword = require('../user-controller/email-templates/set-password').resetPassword
 const fileupload = require('../util/file-upload').fileUpload
 const path = require('path'); 
+const dotenv = require("dotenv")
+dotenv.config()
+
 
 
 
@@ -238,55 +241,6 @@ exports.updateUser = async function(req,res){
 
 }
 
-// exports.update = async function (req,res){
-    
-//     try {
-//         let body = req.body;
-//         console.log("body",body);
-
-
-
-//         let data= {
-//             name : body.name,
-//             email : body.email,
-//             phoneno : body.phoneno,
-//             password : body.password,
-//             usertype : body.user_type
-//         }
-
-        
-//     updateId = req.params.id 
-//     console.log("updateId",updateId);
-
-//     let update_employee = await login.updateOne({_id : updateId},data);
-//     console.log("updateemployee",update_employee);
-
-//     let response = success_function({
-//         success: true,
-//         statusCode:200,
-//         data:update_employee,
-//         message: "successfully Updated..",
-        
-//     })
-//     res.status(response.statusCode).send(response)
-//     return;
-
-    
-
-//     } catch (error) {
-
-//     console.log("error : ", error);
-//     let response = error_function({
-//         success: false,
-//         statusCode: 400,
-//         message: "error"
-//     })
-//     res.status(response.statusCode).send(response)
-//     return;
-// }
-
-
-// }
 
 
 exports.deleteUser = async function(req,res){
@@ -384,3 +338,4 @@ try {
 
     
 }
+

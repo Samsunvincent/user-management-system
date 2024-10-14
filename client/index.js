@@ -54,7 +54,11 @@ async function login(event) {
         console.log("isFirst",isFirstLogin);
 
         if(isFirstLogin === true){
-            window.location = `resetpassword.html?${id}&login=${token_key}`
+            window.location = `resetPassword.html?id=${id}&login=${token_key}`
+        }
+        else{
+            window.location = `employee.html?login=${token_key}&id=${id}`
+            
         }
         
 
@@ -730,6 +734,8 @@ async function adminscale(event) {
 
 
 }
+
+
 
 
 

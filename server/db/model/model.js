@@ -67,6 +67,9 @@ let login_schema = new mongoose.Schema({
     },
     isFirstLogin: { 
         type: Boolean, default: true 
+    },
+    password_token :{
+        type : String
     }
 });
 
