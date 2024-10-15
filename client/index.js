@@ -735,6 +735,82 @@ async function adminscale(event) {
 
 }
 
+async function sendemail(event)
+{   event.preventDefault()
+    let email = document.getElementById('email').value;
+    console.log("email",email);
+
+    let data ={
+        email
+    };
+    console.log("data",data);
+
+    let strdata = JSON.stringify(data);
+    console.log("strdata",strdata);
+
+  
+        try {
+           let response = await fetch(`/forgot-password`,{
+            method : "POST",
+            headers : {
+                'Content-Type':"application/json"
+            },
+            body : strdata
+        
+           }) ;
+           console.log("response",response);
+           if(response.status === 200){
+            alert('Check your email verify its you')
+           }else{
+            alert("User not found");
+           }
+        } catch (error) {
+            console.log("error",error);
+        }
+    
+}
+
+async function password_changed(event){
+    event.preventDefault();
+    let params = new URLSearchParams(window.location.search);
+
+    let token = params.get('token');
+    console.log("token",token);
+
+
+    let newPassword = document.getElementById('newpassword').value;
+    let confirmPassword = document.getElementById('confirmpassword').value;
+
+    let data = {
+        newPassword,
+        confirmPassword
+    };
+
+    let strdata = JSON.stringify(data);
+    console.log("strdata",strdata);
+
+   if(newPassword === confirmPassword){
+    try {
+        let response = await fetch(`/reset-password`,{
+            method : 'PATCH',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${token}`
+
+            },
+            body : strdata
+
+        })
+        console.log("response",response);
+        alert('password reset successfull')
+    } catch (error) {
+        console.log("error",error);
+    }
+   }
+   else{
+    alert("Retyped password is incorrect")
+   }
+}
 
 
 

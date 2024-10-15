@@ -12,7 +12,7 @@ function setAccessControl(access_types){
 
 router.post('/login',setAccessControl('*'),authcontroller.login);
 router.post('/forgot-password',setAccessControl('*') ,authcontroller.forgetpassword);
-router.put('/reset-password',setAccessControl('*'),authcontroller.passwordResetController)
+router.patch('/reset-password',setAccessControl('*'),authcontroller.passwordResetController)
 
 
 
