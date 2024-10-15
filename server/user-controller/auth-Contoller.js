@@ -90,6 +90,7 @@ exports.forgetpassword = async function (req, res) {
             let response = success_function({
                 statusCode: 200,
                 message: "Email sent successfully",
+                data:reset_token
             });
             res.status(response.statusCode).send(response);
             return;
@@ -107,3 +108,60 @@ exports.forgetpassword = async function (req, res) {
 
     }
 }
+
+exports.passwordResetController = async function(req,res){
+    try {
+        const authHeader = req.headers['authorization'];
+        console.log("authHeader",authHeader)
+        const token = authHeader.split(" ")[1];
+        console.log("token",token);
+
+        let newPassword = req.body.newPassword;
+        console.log("newpassword",newPassword)
+        let confirmPassword = req.body.confirmPassword 
+
+        decoded = jwt.decode(token);
+        console.log('decoded',decoded)
+
+        let user =  await login.findOne({$and : [{_id : decoded.user_id}, {password_token : token}]});
+        console.log("user",user)
+
+        
+        if(user){
+
+            
+            let salt = bcrypt.genSaltSync(10);
+            console.log("salt",salt);
+
+            let hashed_password = bcrypt.hashSync(newPassword,salt);
+            console.log("hashedPassword",hashed_password);
+
+            let data = await login.updateOne(
+                {_id : decoded.user_id},
+                { $set:{password : hashed_password,password_token:null}}
+            );
+            console.log("data",data)
+            if(data.matchedCount === 1 && data.modifiedCount == 1){
+                let response = success_function({
+                    success : true,
+                    statusCode : 200,
+                    message : "password changed successgully",
+                    data : data
+                });
+                res.status(response.statusCode).send(response);
+                return;
+            }
+        }
+    } catch (error) {
+        console.log("Error",error);
+
+        let response = error_function({
+            success : false,
+            statusCode : 400,
+            message : "forbidden"
+        });
+        res.status(response.statusCode).send(response);
+        return;
+    }
+}
+
