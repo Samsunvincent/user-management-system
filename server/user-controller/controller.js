@@ -63,9 +63,9 @@ exports.signin  = async function(req,res){
           var randomPassword = generateRandomPassword(12);
           console.log('randomPassword',randomPassword);
 
-        // let content = await resetPassword(name,emails,randomPassword)
+        let content = await resetPassword(name,emails,randomPassword)
 
-        // await sendemail(emails,"update password",content)
+        await sendemail(emails,"update password",content)
 
 
   

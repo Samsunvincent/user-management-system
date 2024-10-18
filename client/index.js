@@ -49,28 +49,37 @@ async function login(event) {
         let token_key = id
 
         localStorage.setItem(token_key, token);
-
         let isFirstLogin = token_data.isFirstLogin;
         console.log("isFirst",isFirstLogin);
-
-        if(isFirstLogin === true){
-            window.location = `resetPassword.html?id=${id}&login=${token_key}`
+        
+        if (isFirstLogin === false) {
+            if(user_type === "Employee"){
+                window.location = `employee.html?login=${token_key}&id=${id}`
+                alert("employee logging succesfull")
+                
+            }
+            else if (user_type === "Admin"){
+                window.location = `admin.html?login=${token_key}&id=${id}`
+                alert("admin logging succesfull")
+            }
         }
         else{
-            window.location = `employee.html?login=${token_key}&id=${id}`
+            window.location = `resetPassword.html?id=${id}&login=${token_key}`;
             
         }
+    
         
+         
 
 
-        if (user_type === "Admin") {
-            window.location = `admin.html?login=${token_key}&id=${id}`,
-                alert("admin logging succesfull")
-        }
-        else if (user_type === "Employee") {
-            window.location = `employee.html?login=${token_key}&id=${id}`
-            alert("employee logging succesfull")
-        }
+        // if (user_type === "Admin") {
+        //     window.location = `admin.html?login=${token_key}&id=${id}`,
+        //         alert("admin logging succesfull")
+        // }
+        // else if (user_type === "Employee") {
+        //     window.location = `employee.html?login=${token_key}&id=${id}`
+        //     
+        // }
     } catch (error) {
         console.log("error", error)
     }

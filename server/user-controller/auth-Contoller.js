@@ -22,7 +22,7 @@ exports.login = async function (req, res) {
             let password_match = bcrypt.compareSync(password, db_password);
             console.log('password_match', password_match)
 
-            check_user.isFirstLogin = false;  // Update first login flag
+            // Update first login flag
 
             await check_user.save();
 
