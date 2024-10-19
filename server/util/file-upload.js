@@ -1,6 +1,8 @@
 const dayjs =  require('dayjs');
 let fs = require('fs')
 
+let path = require('path')
+
 exports.fileUpload = async function (file,directory){
 return new Promise((resolve,reject)=>{
     try {
@@ -65,4 +67,74 @@ return new Promise((resolve,reject)=>{
     }
 })
 
+}
+
+
+
+exports.getserverData = async function() {
+    return new Promise((resolve, reject) => {
+        try {
+            const file_path = path.join('./uploads/datas', 'datas.json');
+            fs.readFile(file_path, (err, data) => {
+                if (err) {
+                    console.log("File read error:", err);
+                    reject(err);
+                } else if (!data || data.length === 0) {
+                    console.log("JSON file is empty.");
+                    resolve(null);  // Resolve with null or some default value if the file is empty
+                } else {
+                    try {
+                        let parsed_data = JSON.parse(data);
+                        console.log("Parsed data:", parsed_data);
+                        let strparsed_data = JSON.stringify(parsed_data);
+                        resolve(strparsed_data);
+                    } catch (parseErr) {
+                        console.log("JSON parsing error:", parseErr);
+                        reject(new Error("Invalid JSON data."));
+                    }
+                }
+            });
+        } catch (error) {
+            console.log("Error:", error);
+            reject(error);
+        }
+    });
+};
+
+
+exports.dataUpload = async function (file,directory){
+    return new Promise((resolve,reject)=>{
+        try {
+            console.log("file",file);
+            console.log("directory",directory);
+
+            let upload_path = `uploads/${directory}`
+            console.log('upload_path',upload_path);
+
+            fs.mkdir(upload_path,{recursive : true},(err)=>{
+                if(err){
+                    reject(err.message ? err.message : err);
+                    
+                }else{
+                    console.log("upload_path : " ,upload_path);
+                    let filename = "datas.json"
+                    upload_path = `uploads/${directory}`
+                    
+                    fs.writeFile(path.join(upload_path, filename), file, (err) => {
+                        if (err) {
+                            console.error('Error writing JSON file:', err);
+                        } else {
+                            console.log(`JSON file successfully created in ${upload_path}/${filename}`);
+                        }
+                    });
+                }
+            })
+
+
+
+        } catch (error) {
+            console.log("error",error)
+            reject(error)
+        }
+    })
 }

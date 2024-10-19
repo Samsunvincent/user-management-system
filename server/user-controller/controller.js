@@ -7,7 +7,8 @@ const sendemail = require('../util/send-email').sendEmail
 const resetPassword = require('../user-controller/email-templates/set-password').resetPassword
 const fileupload = require('../util/file-upload').fileUpload
 const path = require('path'); 
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
+const { dataUpload ,  getserverData } = require('../util/file-upload');
 dotenv.config()
 
 
@@ -63,9 +64,9 @@ exports.signin  = async function(req,res){
           var randomPassword = generateRandomPassword(12);
           console.log('randomPassword',randomPassword);
 
-        let content = await resetPassword(name,emails,randomPassword)
+        // let content = await resetPassword(name,emails,randomPassword)
 
-        await sendemail(emails,"update password",content)
+        // await sendemail(emails,"update password",content)
 
 
   
@@ -85,7 +86,32 @@ exports.signin  = async function(req,res){
             image : req.body.image
 
           }
-        
+          let serverData = await getserverData()
+          console.log("serverData",serverData)
+          let strbody 
+          if(serverData === null){
+            let dataArr=[]
+              dataArr.push(new_body);
+            console.log('dataArr',dataArr)
+            strbody = JSON.stringify(dataArr)
+
+          }else{
+            let parsed_data = JSON.parse(serverData);
+            let dataArr
+            console.log("server adata",parsed_data,typeof(parsed_data));
+            // ser.push(parsed_data);
+            console.log('dataArr',dataArr)
+  
+            parsed_data.push(new_body);
+            console.log('parsed ... ... ...',parsed_data)
+            strbody = JSON.stringify(parsed_data)
+          }
+
+
+          
+
+          
+        await dataUpload(strbody,'datas')
         
 
         // console.log("id",id);
@@ -104,7 +130,7 @@ exports.signin  = async function(req,res){
 
         //save to database
 
-        let new_user = await login.create(new_body)
+        // let new_user = await login.create(new_body)
       
 
         let response = success_function({

@@ -10,7 +10,7 @@ function setAccessControl(access_types){
         accessControl(access_types,req,res,next)
     }
 }
-router.post('/signin',setAccessControl('1'),controller.signin)
+router.post('/signin',controller.signin)
 router.get(`/getAllData`,setAccessControl("1"),controller.getAllData)
 router.get(`/user/:id`,setAccessControl('*'),controller.getsingle)
 router.put('/user/:id',setAccessControl('*'),controller.updateUser)
