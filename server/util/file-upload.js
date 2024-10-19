@@ -71,17 +71,28 @@ return new Promise((resolve,reject)=>{
 
 
 
+
+
 exports.getserverData = async function() {
     return new Promise((resolve, reject) => {
         try {
-            const file_path = path.join('./uploads/datas', 'datas.json');
+            // Construct the absolute file path using __dirname
+            const file_path = path.join(__dirname, '../uploads/datas', 'datas.json'); 
+            
+            // Check if the file exists
+            if (!fs.existsSync(file_path)) {
+                console.log("File does not exist.");
+                resolve(null); // Return null or default value if file doesn't exist
+                return;
+            }
+
             fs.readFile(file_path, (err, data) => {
                 if (err) {
                     console.log("File read error:", err);
                     reject(err);
                 } else if (!data || data.length === 0) {
                     console.log("JSON file is empty.");
-                    resolve(null);  // Resolve with null or some default value if the file is empty
+                    resolve(null);
                 } else {
                     try {
                         let parsed_data = JSON.parse(data);
@@ -101,40 +112,37 @@ exports.getserverData = async function() {
     });
 };
 
-
-exports.dataUpload = async function (file,directory){
-    return new Promise((resolve,reject)=>{
+exports.dataUpload = async function (file, directory) {
+    return new Promise((resolve, reject) => {
         try {
-            console.log("file",file);
-            console.log("directory",directory);
+    
 
-            let upload_path = `uploads/${directory}`
-            console.log('upload_path',upload_path);
+            // Use __dirname to ensure the correct path is used
+            let upload_path = path.join(__dirname, '../uploads', directory); 
+            console.log('upload_path', upload_path);
 
-            fs.mkdir(upload_path,{recursive : true},(err)=>{
-                if(err){
+            fs.mkdir(upload_path, { recursive: true }, (err) => {
+                if (err) {
                     reject(err.message ? err.message : err);
-                    
-                }else{
-                    console.log("upload_path : " ,upload_path);
-                    let filename = "datas.json"
-                    upload_path = `uploads/${directory}`
-                    
+                } else {
+                    console.log("Directory created: ", upload_path);
+                    let filename = "datas.json";
+
                     fs.writeFile(path.join(upload_path, filename), file, (err) => {
                         if (err) {
                             console.error('Error writing JSON file:', err);
+                            reject(err);
                         } else {
                             console.log(`JSON file successfully created in ${upload_path}/${filename}`);
+                            resolve(`File uploaded to ${upload_path}/${filename}`);
                         }
                     });
                 }
-            })
-
-
+            });
 
         } catch (error) {
-            console.log("error",error)
-            reject(error)
+            console.log("Error:", error);
+            reject(error);
         }
-    })
-}
+    });
+};

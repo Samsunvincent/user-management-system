@@ -97,6 +97,7 @@ exports.signin  = async function(req,res){
 
           }else{
             let parsed_data = JSON.parse(serverData);
+           
             let dataArr
             console.log("server adata",parsed_data,typeof(parsed_data));
             // ser.push(parsed_data);
