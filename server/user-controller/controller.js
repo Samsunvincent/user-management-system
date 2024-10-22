@@ -15,143 +15,245 @@ dotenv.config()
 
 
 
-exports.signin  = async function(req,res){
-    try {
+// exports.signin  = async function(req,res){
+//     try {
         
-        let body = req.body;
-        console.log('body from signin',body);
+//         let body = req.body;
+//         console.log('body from signin',body);
 
-        let body_user_type = body.user_type;
-        console.log("body_user_type",body_user_type);
+//         let body_user_type = body.user_type;
+//         console.log("body_user_type",body_user_type);
 
-        let emails = body.email;
-        console.log("email",emails)
+//         let emails = body.email;
+//         console.log("email",emails)
 
-        let name = body.name;
-        console.log("name",name);
+//         let name = body.name;
+//         console.log("name",name);
         
         
-        let match = await userType.findOne({ user_type : body.user_type});
-        console.log('match',match);
+//         // let match = await userType.findOne({ user_type : body.user_type});
+//         // console.log('match',match);
         
-        let id = match._id;
-        body.user_type = id
-        console.log('body.userType',body.user_type)
+//         // let id = match._id;
+//         // body.user_type = id
+//         console.log('body.userType',body.user_type)
 
-        let image = body.image;
-        console.log("image nnnnn",image);
+//         let image = body.image;
+//         console.log("image nnnnn",image);
 
-        if (image) {
-            let img_path = await fileupload(image, "user");
-            console.log("img_path", img_path);
-            body.image = img_path
-        }
+//         if (image) {
+//             let img_path = await fileupload(image, "user");
+//             console.log("img_path", img_path);
+//             body.image = img_path
+//         }
 
 
-        function generateRandomPassword(length) {
-            let charset =
-              "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
-            let password = "";
+//         function generateRandomPassword(length) {
+//             let charset =
+//               "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
+//             let password = "";
   
-            for (var i = 0; i < length; i++) {
-              var randomIndex = Math.floor(Math.random() * charset.length);
-              password += charset.charAt(randomIndex);
-            }
+//             for (var i = 0; i < length; i++) {
+//               var randomIndex = Math.floor(Math.random() * charset.length);
+//               password += charset.charAt(randomIndex);
+//             }
   
-            return password;
-          }
+//             return password;
+//           }
   
-          var randomPassword = generateRandomPassword(12);
-          console.log('randomPassword',randomPassword);
+//           var randomPassword = generateRandomPassword(12);
+//           console.log('randomPassword',randomPassword);
 
-        // let content = await resetPassword(name,emails,randomPassword)
+//         // let content = await resetPassword(name,emails,randomPassword)
 
-        // await sendemail(emails,"update password",content)
+//         // await sendemail(emails,"update password",content)
 
 
   
-          let salt = bcrypt.genSaltSync(10);
-          let password = bcrypt.hashSync(randomPassword, salt);
-          console.log("password0",password);
+//           let salt = bcrypt.genSaltSync(10);
+//           let password = bcrypt.hashSync(randomPassword, salt);
+//           console.log("password0",password);
 
 
 
-          let new_body = {
-            name : req.body.name,
-            email : req.body.email,
-            password : password,
-            phone : req.body.phone,
-            age : req.body.age,
-            userType : req.body.user_type,
-            image : req.body.image
+//           let new_body = {
+//             name : req.body.name,
+//             email : req.body.email,
+//             password : password,
+//             phone : req.body.phone,
+//             age : req.body.age,
+//             userType : req.body.user_type,
+//             image : req.body.image
 
-          }
-          let serverData = await getserverData()
-          console.log("serverData",serverData)
-          let strbody 
-          if(serverData === null){
-            let dataArr=[]
-              dataArr.push(new_body);
-            console.log('dataArr',dataArr)
-            strbody = JSON.stringify(dataArr)
+//           }
+//           let serverData = await getserverData()
+//           console.log("serverData",serverData)
+//           let strbody 
+//           if(serverData === null){
+//             let dataArr=[]
+//               dataArr.push(new_body);
+//             console.log('dataArr',dataArr)
+//             strbody = JSON.stringify(dataArr)
 
-          }else{
-            let parsed_data = JSON.parse(serverData);
+//           }else{
+//             let parsed_data = JSON.parse(serverData);
+//             console.log("parsed_Data",parsed_data.length)
+
+//             parsed_data.length?Math.max(parsed_data.map(parsed_data=>parsed_data.id))+1:1
            
-            let dataArr
-            console.log("server adata",parsed_data,typeof(parsed_data));
-            // ser.push(parsed_data);
-            console.log('dataArr',dataArr)
+//             let dataArr
+//             console.log("server adata",parsed_data,typeof(parsed_data));
+//             // ser.push(parsed_data);
+//             console.log('dataArr',dataArr)
   
-            parsed_data.push(new_body);
-            console.log('parsed ... ... ...',parsed_data)
-            strbody = JSON.stringify(parsed_data)
-          }
+//             parsed_data.push(new_body);
+//             console.log('parsed ... ... ...',parsed_data)
+//             strbody = JSON.stringify(parsed_data)
+//           }
 
 
           
 
           
-        await dataUpload(strbody,'datas')
+//         await dataUpload(strbody,'datas')
         
 
-        // console.log("id",id);
+//         // console.log("id",id);
 
-        //hashing the password
+//         //hashing the password
 
      
 
-        // let hashed_confirm_Password = bcrypt.hashSync(body.confirm_password,salt);
+//         // let hashed_confirm_Password = bcrypt.hashSync(body.confirm_password,salt);
 
 
     
 
-        // body.confirm_password = hashed_confirm_Password;
-        // console.log("hashed_confirm_password : ",hashed_confirm_Password);
+//         // body.confirm_password = hashed_confirm_Password;
+//         // console.log("hashed_confirm_password : ",hashed_confirm_Password);
 
-        //save to database
+//         //save to database
 
-        // let new_user = await login.create(new_body)
+//         // let new_user = await login.create(new_body)
       
 
+//         let response = success_function({
+//             success : true,
+//             statusCode: 200,
+//             message : "user created succesfully"
+//         })
+//         res.status(response.statusCode).send(response)
+//         return;
+//     } catch (error) {
+//         console.log("error",error)
+//         let response = error_function({
+//             success: false,
+//             statusCode : 400,
+//             message : "user creation failed"
+//         })
+//         res.status(response.statusCode).send(response)
+//         return;
+//     }
+// }
+
+
+
+
+exports.signin = async function(req, res) {
+    try {
+        let body = req.body;
+        console.log('Body from signin:', body);
+
+        let { user_type, email, name, image, phone, age } = body;
+        console.log('User type:', user_type);
+        console.log('Email:', email);
+        console.log('Name:', name);
+
+        // If an image is provided, upload it and update the image path in the body
+        if (image) {
+            let img_path = await fileupload(image, "user");
+            console.log("Image path:", img_path);
+            body.image = img_path;
+        }
+
+        // Function to generate a random password
+        function generateRandomPassword(length) {
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                let randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset.charAt(randomIndex);
+            }
+            return password;
+        }
+
+        let randomPassword = generateRandomPassword(12);
+        console.log('Generated random password:', randomPassword);
+
+        // Hash the generated random password
+        let salt = bcrypt.genSaltSync(10);
+        let hashedPassword = bcrypt.hashSync(randomPassword, salt);
+        console.log('Hashed password:', hashedPassword);
+
+        // Fetch server data to get the current list of users
+        let serverData = await getserverData();
+        let dataArr = [];
+
+        if (serverData === null) {
+            // If no server data exists, start with an empty array
+            console.log('No existing users found. Initializing user list.');
+        } else {
+            // Parse the existing server data (array of users)
+            dataArr = JSON.parse(serverData);
+            console.log('Existing users:', dataArr);
+        }
+
+        // Generate a unique user ID based on the length of the current user array
+        let userId = dataArr.length + 1; // ID is one more than the length of the array
+        console.log('Generated User ID:', userId);
+
+        // Create a new body object with all the required fields, including the generated ID
+        let new_body = {
+            id: userId, // Assign the ID based on array length
+            name: name,
+            email: email,
+            password: hashedPassword,
+            phone: phone,
+            age: age,
+            userType: user_type,
+            image: body.image
+        };
+
+        // Add the new user to the data array
+        dataArr.push(new_body);
+        console.log('Updated user list:', dataArr);
+
+        // Convert the updated data array to a string for storage
+        let strbody = JSON.stringify(dataArr);
+
+        // Upload the updated data to the server
+        await dataUpload(strbody, 'datas');
+
+        // Return a success response
         let response = success_function({
-            success : true,
+            success: true,
             statusCode: 200,
-            message : "user created succesfully"
-        })
-        res.status(response.statusCode).send(response)
-        return;
+            message: "User created successfully"
+        });
+        res.status(response.statusCode).send(response);
     } catch (error) {
-        console.log("error",error)
+        console.error('Error:', error);
+
+        // Return an error response
         let response = error_function({
             success: false,
-            statusCode : 400,
-            message : "user creation failed"
-        })
-        res.status(response.statusCode).send(response)
-        return;
+            statusCode: 400,
+            message: "User creation failed"
+        });
+        res.status(response.statusCode).send(response);
     }
-}
+};
+
 
 exports.getAllData = async function(req,res){
     try {
