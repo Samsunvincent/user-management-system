@@ -11,7 +11,7 @@ function setAccessControl(access_types){
     }
 }
 router.post('/signin',controller.signin)
-router.get(`/getAllData`,setAccessControl("1"),controller.getAllData)
+router.get(`/getAllData`,setAccessControl("*"),controller.getAllData)
 router.get(`/user/:id`,setAccessControl('*'),controller.getsingle)
 router.put('/user/:id',setAccessControl('*'),controller.updateUser)
 router.delete('/user/:id',setAccessControl('1'),controller.deleteUser);

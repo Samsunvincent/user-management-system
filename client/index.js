@@ -1,25 +1,117 @@
 
 
 
+// async function login(event) {
+//     event.preventDefault()
+
+
+//     let email = document.getElementById('email').value
+//     console.log("email", email);
+
+//     let password = document.getElementById('password').value;
+//     console.log('password', password);
+
+//     let data = {
+//         email,
+//         password
+//     };
+//     console.log("data : ", data);
+
+//     let strdata = JSON.stringify(data);
+//     console.log("strdata", strdata);
+
+
+//     try {
+//         let response = await fetch('/login', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: strdata
+//         })
+//         console.log("response", response)
+
+//         let parsed_Response = await response.json();
+//         console.log("parsed_Response", parsed_Response);
+
+//         if(parsed_Response.statusCode === 400){
+//             alert(parsed_Response.message)
+//         }
+
+//         let token_data = parsed_Response.data;
+//         console.log("token_data", token_data);
+
+//         let token = token_data.token;
+//         console.log('token', token);
+
+//         let id = token_data.id;
+//         console.log("id", id);
+
+//         let user_type = token_data.user_type;
+//         console.log("user_type : ", user_type);
+
+//         let token_key = id
+
+//         localStorage.setItem(token_key, token);
+//         let isFirstLogin = token_data.isFirstLogin;
+//         console.log("isFirst", isFirstLogin);
+
+//         if (isFirstLogin === false) {
+//             if (user_type === "Employee") {
+//                 window.location = `employee.html?login=${token_key}&id=${id}`
+//                 alert("employee logging succesfull")
+
+//             }
+//             else if (user_type === "Admin") {
+//                 window.location = `admin.html?login=${token_key}&id=${id}`
+//                 alert("admin logging succesfull")
+//             }
+//         }
+//         else {
+//             window.location = `resetPassword.html?id=${id}&login=${token_key}`;
+
+//         }
+
+
+
+
+
+//         // if (user_type === "Admin") {
+//         //     window.location = `admin.html?login=${token_key}&id=${id}`,
+//         //         alert("admin logging succesfull")
+//         // }
+//         // else if (user_type === "Employee") {
+//         //     window.location = `employee.html?login=${token_key}&id=${id}`
+//         //     
+//         // }
+//     } catch (error) {
+//         console.log("error", error)
+//     }
+// }
+
+
+//CHATGPT VALIDATED
 async function login(event) {
-    event.preventDefault()
+    event.preventDefault();
 
+    // Get email and password values
+    let email = document.getElementById('email').value.trim();
+    let password = document.getElementById('password').value.trim();
 
-    let email = document.getElementById('email').value
-    console.log("email", email);
+    // Basic validation for email and password
+    if (!validateEmail(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
 
-    let password = document.getElementById('password').value;
-    console.log('password', password);
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters long.");
+        return;
+    }
 
-    let data = {
-        email,
-        password
-    };
-    console.log("data : ", data);
-
+    // Create the data object
+    let data = { email, password };
     let strdata = JSON.stringify(data);
-    console.log("strdata", strdata);
-
 
     try {
         let response = await fetch('/login', {
@@ -28,62 +120,126 @@ async function login(event) {
                 'Content-Type': 'application/json'
             },
             body: strdata
-        })
-        console.log("response", response)
+        });
+
+        if (!response.ok) {
+            alert("Error logging in. Please check your credentials.");
+            return;
+        }
 
         let parsed_Response = await response.json();
-        console.log("parsed_Response", parsed_Response);
+
+        if (parsed_Response.statusCode === 400) {
+            alert(parsed_Response.message);
+            return;
+        }
 
         let token_data = parsed_Response.data;
-        console.log("token_data", token_data);
-
         let token = token_data.token;
-        console.log('token', token);
-
         let id = token_data.id;
-        console.log("id", id);
-
         let user_type = token_data.user_type;
-        console.log("user_type : ", user_type);
-
-        let token_key = id
-
-        localStorage.setItem(token_key, token);
+        let token_key = id;
         let isFirstLogin = token_data.isFirstLogin;
-        console.log("isFirst",isFirstLogin);
-        
-        if (isFirstLogin === false) {
-            if(user_type === "Employee"){
-                window.location = `employee.html?login=${token_key}&id=${id}`
-                alert("employee logging succesfull")
-                
+
+        // Store token in local storage
+        localStorage.setItem(token_key, token);
+
+        // Redirect based on user type and login status
+        if (!isFirstLogin) {
+            if (user_type === "Employee") {
+                window.location = `employee.html?login=${token_key}&id=${id}`;
+                alert("Employee login successful");
+            } else if (user_type === "Admin") {
+                window.location = `admin.html?login=${token_key}&id=${id}`;
+                alert("Admin login successful");
             }
-            else if (user_type === "Admin"){
-                window.location = `admin.html?login=${token_key}&id=${id}`
-                alert("admin logging succesfull")
-            }
-        }
-        else{
+        } else {
             window.location = `resetPassword.html?id=${id}&login=${token_key}`;
-            
         }
-    
-        
-         
 
-
-        // if (user_type === "Admin") {
-        //     window.location = `admin.html?login=${token_key}&id=${id}`,
-        //         alert("admin logging succesfull")
-        // }
-        // else if (user_type === "Employee") {
-        //     window.location = `employee.html?login=${token_key}&id=${id}`
-        //     
-        // }
     } catch (error) {
-        console.log("error", error)
+        console.log("Error:", error);
+        alert("An error occurred. Please try again.");
     }
 }
+
+// Helper function to validate email format
+function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+
+
+
+//RESET PASSWORD
+
+async function ResetPassword(event) {
+    event.preventDefault()
+
+
+
+
+
+    let password = document.getElementById('Current-password').value
+    let newpassword = document.getElementById('new-password').value
+
+
+    let params = new URLSearchParams(window.location.search);
+
+    let id = params.get('id');
+
+    let token_key = params.get('login');
+    console.log("token_key", token_key);
+
+    let token = localStorage.getItem(token_key);
+    console.log("token from reset password", token);
+
+
+    if ( password && newpassword) {
+        let resetData = {
+
+            password,
+            newpassword
+        };
+        let strResetData = JSON.stringify(resetData);
+
+        if (strResetData) {
+            try {
+                let response = await fetch(`/passwordreset/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: strResetData,
+                });
+
+                console.log("response", response);
+
+                // Check if the response was successful
+
+
+                let parsed_Response = await response.json();
+                console.log("parsed resposne", parsed_Response)
+
+                if (parsed_Response.statusCode === 200) {
+                    alert(parsed_Response.message)
+                    window.location = 'index.html'
+                }
+                else {
+                    alert(parsed_Response.message)
+                }
+            } catch (error) {
+                console.log("Error from reset data:", error);
+            }
+
+        }
+    }
+
+
+}
+
 
 async function getAllUsers() {
 
@@ -744,47 +900,47 @@ async function adminscale(event) {
 
 }
 
-async function sendemail(event)
-{   event.preventDefault()
+async function sendemail(event) {
+    event.preventDefault()
     let email = document.getElementById('email').value;
-    console.log("email",email);
+    console.log("email", email);
 
-    let data ={
+    let data = {
         email
     };
-    console.log("data",data);
+    console.log("data", data);
 
     let strdata = JSON.stringify(data);
-    console.log("strdata",strdata);
+    console.log("strdata", strdata);
 
-  
-        try {
-           let response = await fetch(`/forgot-password`,{
-            method : "POST",
-            headers : {
-                'Content-Type':"application/json"
+
+    try {
+        let response = await fetch(`/forgot-password`, {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
             },
-            body : strdata
-        
-           }) ;
-           console.log("response",response);
-           if(response.status === 200){
+            body: strdata
+
+        });
+        console.log("response", response);
+        if (response.status === 200) {
             alert('Check your email verify its you')
-           }else{
+        } else {
             alert("User not found");
-           }
-        } catch (error) {
-            console.log("error",error);
         }
-    
+    } catch (error) {
+        console.log("error", error);
+    }
+
 }
 
-async function password_changed(event){
+async function password_changed(event) {
     event.preventDefault();
     let params = new URLSearchParams(window.location.search);
 
     let token = params.get('token');
-    console.log("token",token);
+    console.log("token", token);
 
 
     let newPassword = document.getElementById('newpassword').value;
@@ -796,29 +952,29 @@ async function password_changed(event){
     };
 
     let strdata = JSON.stringify(data);
-    console.log("strdata",strdata);
+    console.log("strdata", strdata);
 
-   if(newPassword === confirmPassword){
-    try {
-        let response = await fetch(`/reset-password`,{
-            method : 'PATCH',
-            headers : {
-                'Content-Type' : 'application/json',
-                'Authorization' : `Bearer ${token}`
+    if (newPassword === confirmPassword) {
+        try {
+            let response = await fetch(`/reset-password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
 
-            },
-            body : strdata
+                },
+                body: strdata
 
-        })
-        console.log("response",response);
-        alert('password reset successfull')
-    } catch (error) {
-        console.log("error",error);
+            })
+            console.log("response", response);
+            alert('password reset successfull')
+        } catch (error) {
+            console.log("error", error);
+        }
     }
-   }
-   else{
-    alert("Retyped password is incorrect")
-   }
+    else {
+        alert("Retyped password is incorrect")
+    }
 }
 
 

@@ -1,1 +1,47 @@
-[{"id":1,"name":"ashi","email":"ashi@gmail.com","password":"$2b$10$LUkQr/V8BSlLK9B.jDYqd.8h5ozMQqf.jNWKQv..83OvwkIQQPHNu","phone":"9895478032","age":"22","userType":"Employee"}]
+[
+    {
+        "id": 1,
+        "name": "ashik",
+        "email": "ashik@gmail.com",
+        "password": "$2b$10$vR03eZBgniKkyd8dZYzBAeIet9OcR/4pEca3BvMc7nm3NaSGwA2FK",
+        "phone": "9895478032",
+        "age": "22",
+        "userType": "Employee"
+    },
+    {
+        "id": 2,
+        "name": "sajan",
+        "email": "sajan@gmail.com",
+        "password": "$2b$10$/b8pdLuy5sFjXEBM.hTfHu0FgDScjQ6UBV1h.4SLsMwuio9jE2RWO",
+        "phone": "9895478032",
+        "age": "22",
+        "userType": "Employee"
+    },
+    {
+        "id": 3,
+        "name": "sajan",
+        "email": "sajan@gmail.com",
+        "password": "$2b$10$OdGAnd6eeEIBProj6BeKfeIgxbans8WDupZ.dmDylzv2528LQAY7K",
+        "phone": "9895478032",
+        "age": "22",
+        "userType": "Employee"
+    },
+    {
+        "id": 4,
+        "name": "jane",
+        "email": "jane@gmail.com",
+        "password": "$2b$10$iRzborRMyDAQTyeeX0ZBm.PdGfNYUORQEL.nlGIKx.nPOj/Xf3ybS",
+        "phone": "9895478032",
+        "age": "22",
+        "userType": "Employee"
+    },
+    {
+        "id": 5,
+        "name": "jane",
+        "email": "jane@gmail.com",
+        "password": "$2b$10$Eb3tjraaxYspuIgEymH/pO5D6CLVWPpAzcO2pWtwrAsHLf30G/rrq",
+        "phone": "9895478032",
+        "age": "22",
+        "userType": "Employee"
+    }
+]

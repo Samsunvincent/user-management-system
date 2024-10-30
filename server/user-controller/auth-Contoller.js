@@ -13,56 +13,79 @@ exports.login = async function (req, res) {
         let email = req.body.email
         console.log("email", email)
 
-        let check_user = await login.findOne({ email }).populate('userType')
-
-        if (check_user) {
-            let password = req.body.password
-            let db_password = check_user.password
-
-            let password_match = bcrypt.compareSync(password, db_password);
-            console.log('password_match', password_match)
-
-            // Update first login flag
-
-            await check_user.save();
-
-            if (password_match) {
-                let token = jwt.sign({ user_id: check_user._id }, process.env.PRIVATE_KEY, { expiresIn: "10d" });
-                console.log("token : ", token);
-
-                // let token_id = user_id;
-                // console.log("token_id",token_id)
-                let response_data = {
-                    id: check_user._id,
-                    user_type: check_user.userType.user_type,
-                    token: token,
-                    isFirstLogin: check_user.isFirstLogin
-                }
-                console.log("response_data", response_data);
-
-
-                let response = success_function({
-                    success: true,
-                    statusCode: 200,
-                    message: "token",
-                    data: response_data,
-                });
-                res.status(response.statusCode).send(response);
-                return;
-            }
-
-        }
-        else {
+        if(!email){
             let response = error_function({
                 success: false,
                 statusCode: 400,
-                message: "user not found",
+                message: "Re-check your password",
 
             });
             res.status(response.statusCode).send(response);
             return;
+        }else{
+            let check_user = await login.findOne({ email }).populate('userType')
 
+            if (check_user) {
+                let password = req.body.password
+                let db_password = check_user.password
+    
+                let password_match = bcrypt.compareSync(password, db_password);
+                console.log('password_match', password_match)
+    
+                // Update first login flag
+    
+               
+    
+                if (password_match) {
+                    let token = jwt.sign({ user_id: check_user._id }, process.env.PRIVATE_KEY, { expiresIn: "10d" });
+                    console.log("token : ", token);
+    
+                    // let token_id = user_id;
+                    // console.log("token_id",token_id)
+                    let response_data = {
+                        id: check_user._id,
+                        user_type: check_user.userType.user_type,
+                        token: token,
+                        isFirstLogin: check_user.isFirstLogin
+                    }
+                    console.log("response_data", response_data);
+    
+    
+                    let response = success_function({
+                        success: true,
+                        statusCode: 200,
+                        message: "token",
+                        data: response_data,
+                    });
+                    res.status(response.statusCode).send(response);
+                    return;
+                }
+                else{
+                    let response = error_function({
+                        success: false,
+                        statusCode: 400,
+                        message: "Re-check your password",
+        
+                    });
+                    res.status(response.statusCode).send(response);
+                    return;
+                }
+    
+            }
+            else {
+                let response = error_function({
+                    success: false,
+                    statusCode: 400,
+                    message: "user not found",
+    
+                });
+                res.status(response.statusCode).send(response);
+                return;
+    
+            }
         }
+
+      
     } catch (error) {
         console.log("error", error)
     }
